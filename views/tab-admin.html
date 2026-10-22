@@ -1,0 +1,31 @@
+<section class="tab-view" id="tab-admin">
+      <div class="card">
+        <div class="section-head"><h2>Trainers &amp; staff</h2><button class="btn small" id="open-add-trainer">+ Add</button></div>
+        <div id="trainers-list"></div>
+      </div>
+      <div class="card">
+        <div class="section-head"><h2>Settings</h2></div>
+        <label>Gym name</label>
+        <div class="btn-row">
+          <input type="text" id="setting-gymname">
+          <button class="btn small" id="save-gymname">Save</button>
+        </div>
+        <label style="margin-top:16px;">Add / update a setting</label>
+        <div class="field-row">
+          <input type="text" id="setting-key" placeholder="Key">
+          <input type="text" id="setting-value" placeholder="Value">
+        </div>
+        <button class="btn secondary" id="save-setting">Save setting</button>
+        <div id="settings-list" style="margin-top:10px;"></div>
+      </div>
+      <div class="card">
+        <h2>Activity log</h2>
+        <div id="activity-list"></div>
+      </div>
+      <div class="card">
+        <h2>Apps Script</h2>
+        <p class="row-sub">Code edits happen in the Apps Script editor itself (Extensions &gt; Apps Script in the linked Google Sheet), not inside this app. This keeps the deployment stable and avoids a trainer or bug pushing broken code live.</p>
+        <p class="row-sub" style="margin-top:8px;">Backend URL in use:</p>
+        <div class="row-sub" id="admin-script-url" style="word-break:break-all;"></div>
+      </div>
+    </section>
