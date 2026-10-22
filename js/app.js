@@ -322,6 +322,7 @@ function renderAll(){
   if (!state.bootstrap) return;
   applyBranding();
   renderCollectionTab();
+  loadCashHandovers();
   renderDetailsTab();
   renderMembersTab();
   if (state.auth.role === 'Admin') renderAdminTab();
