@@ -117,3 +117,82 @@
 /* App bootstrap error state */
 .load-error{max-width:560px;margin:12vh auto;padding:24px;color:var(--text);font-family:inherit}
 .load-error p{color:var(--muted);overflow-wrap:anywhere}
+
+
+/* ---------- Premium glass finish ---------- */
+:root {
+  --bg: #08090c;
+  --surface: rgba(24, 26, 32, 0.72);
+  --surface-2: rgba(255, 255, 255, 0.055);
+  --border: rgba(255, 255, 255, 0.12);
+  --text: #f7f7fa;
+  --muted: #a7a9b4;
+  --accent: #f0263b;
+  --accent-dim: #8d1725;
+  --radius: 20px;
+}
+body {
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(240, 38, 59, .13), transparent 36rem),
+    radial-gradient(ellipse at 100% 25%, rgba(112, 124, 155, .10), transparent 32rem),
+    #08090c;
+}
+#login-screen { padding: 22px; }
+.login-card {
+  max-width: 410px;
+  padding: 32px 26px;
+  background: linear-gradient(145deg, rgba(255,255,255,.085), rgba(255,255,255,.025));
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 28px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.10);
+  -webkit-backdrop-filter: blur(28px) saturate(145%);
+  backdrop-filter: blur(28px) saturate(145%);
+}
+.brand-wordmark { width: min(100%, 320px); max-height: 110px; object-fit: contain; margin-bottom: 12px; }
+.brand-name { font-size: 17px; letter-spacing: 1.5px; text-align: center; }
+.brand-sub { font-size: 12px; letter-spacing: .3px; margin-top: 7px; }
+input[type=text], input[type=password], input[type=number], input[type=date], input[type=tel], select, textarea {
+  background: rgba(255,255,255,.055);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  min-height: 52px;
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+input:focus, select:focus, textarea:focus {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(240,38,59,.75);
+  box-shadow: 0 0 0 3px rgba(240,38,59,.12);
+}
+.btn {
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff3348, #d9162d);
+  box-shadow: 0 8px 24px rgba(217,22,45,.20), inset 0 1px 0 rgba(255,255,255,.20);
+}
+header.topbar {
+  background: rgba(12,13,17,.72);
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  backdrop-filter: blur(24px) saturate(150%);
+}
+.topbar-mark {
+  width: 42px; height: 42px; flex-basis: 42px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 13px;
+  background: rgba(255,255,255,.045);
+  padding: 4px;
+}
+.card, .stat, .modal, .panel, .list-item {
+  background: linear-gradient(145deg, rgba(255,255,255,.065), rgba(255,255,255,.025));
+  border-color: rgba(255,255,255,.11);
+  box-shadow: 0 10px 30px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.045);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+}
+nav.bottomnav {
+  background: rgba(15,16,21,.76);
+  border-top-color: rgba(255,255,255,.12);
+  -webkit-backdrop-filter: blur(26px) saturate(155%);
+  backdrop-filter: blur(26px) saturate(155%);
+}
+nav.bottomnav button { border-radius: 13px; }
+nav.bottomnav button.active { background: rgba(240,38,59,.10); }
