@@ -1,19 +1,33 @@
 <!-- ================= LOGIN ================= -->
 <div id="login-screen">
-  <div class="login-card">
-    <div class="brand">
-      <img class="brand-wordmark" alt="AK PACK FITNESS">
-      <div class="brand-name" id="login-brand-name">AK PACK FITNESS</div>
-      <div class="brand-sub">Staff sign in</div>
-    </div>
-    <form id="login-form">
-      <label>Username</label>
-      <input type="text" id="login-username" autocomplete="username" required>
-      <label>PIN</label>
-      <input type="password" id="login-pin" inputmode="numeric" autocomplete="current-password" required>
-      <div class="error-msg" id="login-error"></div>
-      <button class="btn" type="submit" id="login-btn">Sign in</button>
-    </form>
+  <div class="login-layout">
+    <section class="login-card" aria-labelledby="login-heading">
+      <div class="login-brand">
+        <img class="brand-wordmark" alt="AK PACK FITNESS">
+        <div class="login-eyebrow">AK PACK FITNESS · STAFF PORTAL</div>
+        <h1 id="login-heading">Welcome back</h1>
+        <p class="login-intro">Sign in to manage daily collections, payments and member records.</p>
+      </div>
+      <form id="login-form">
+        <label for="login-username">Username</label>
+        <input type="text" id="login-username" placeholder="Enter your username" autocomplete="username" required>
+        <label for="login-pin">PIN</label>
+        <input type="password" id="login-pin" placeholder="Enter your PIN" inputmode="numeric" autocomplete="current-password" required>
+        <div class="error-msg" id="login-error" role="alert"></div>
+        <button class="btn login-submit" type="submit" id="login-btn">Sign in <span aria-hidden="true">→</span></button>
+      </form>
+      <div class="login-footer"><span class="login-footer-dot"></span> Secure staff access</div>
+    </section>
+    <aside class="login-side" aria-label="Application introduction">
+      <div class="login-side-kicker">BUILT FOR THE PACK</div>
+      <h2>Every collection.<br><span>Under control.</span></h2>
+      <p>A single place to track payments, daily cash and member activity at AK PACK Fitness.</p>
+      <div class="login-feature-list">
+        <div><span class="login-feature-icon">₹</span><span><strong>Daily collections</strong><small>Cash and UPI at a glance</small></span></div>
+        <div><span class="login-feature-icon">↗</span><span><strong>Clear records</strong><small>Payments and cash movement history</small></span></div>
+        <div><span class="login-feature-icon">✓</span><span><strong>Staff access</strong><small>Role-based workspace</small></span></div>
+      </div>
+    </aside>
   </div>
 </div>
 
