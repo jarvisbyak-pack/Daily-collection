@@ -27,6 +27,24 @@ async function bootstrap() {
     ]);
     root.innerHTML = loginHtml + shellHtml;
     document.getElementById('tab-views').innerHTML = tabs.join('\n');
+
+    // Resolve branding assets from this module's real URL, not the page's base path.
+    const wordmark = root.querySelector('.brand-wordmark');
+    const headerMark = root.querySelector('.topbar-mark img');
+    if (wordmark) {
+      wordmark.src = new URL('../assets/ak-pack-wordmark.png', import.meta.url).href;
+      wordmark.addEventListener('error', () => {
+        console.error('AK PACK FITNESS wordmark failed to load:', wordmark.src);
+        wordmark.style.display = 'none';
+      }, { once: true });
+    }
+    if (headerMark) {
+      headerMark.src = new URL('../assets/ak-pack-mark.png', import.meta.url).href;
+      headerMark.addEventListener('error', () => {
+        console.error('AK Pack Fitness mark failed to load:', headerMark.src);
+        headerMark.style.display = 'none';
+      }, { once: true });
+    }
     await import('./app.js');
   } catch (error) {
     root.innerHTML = `<main class="load-error"><h1>AK Pack Fitness</h1><p>The app UI could not be loaded.</p><p>${String(error.message || error)}</p><p>Make sure the complete project folder is uploaded and served over HTTP/HTTPS.</p></main>`;
