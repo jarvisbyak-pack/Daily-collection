@@ -565,7 +565,7 @@ function openPaymentModal(){
         saveCache(state.bootstrap); renderCollectionTab();
         toast('Saved on this device; waiting to sync.');
       } else {
-        closeModal(); toast('Payment saved.'); await refreshBootstrap();
+        closeModal(); toast('Payment saved.'); await refreshBootstrap(); await loadCashHandovers();
       }
     } catch(err){
       toast('Could not save: ' + err.message);
@@ -640,7 +640,7 @@ function openCloseDayModal(){
     btn.disabled = true; btn.textContent = 'Closing…';
     try{
       await apiCall('closeDay', { date: todayISO(), actualClosingCash: actual });
-      closeModal(); toast('Day closed.'); await refreshBootstrap();
+      closeModal(); toast('Day closed.'); await refreshBootstrap(); await loadCashHandovers();
     } catch(err){ toast('Could not close day: ' + err.message); btn.disabled = false; btn.textContent = 'Close day'; }
   });
 }
