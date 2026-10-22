@@ -24,7 +24,10 @@ let state = {
   syncing: false,
   advances: null,
   advanceViewDate: null,   // any date inside the cycle currently being viewed
-  detailsDate: null
+  detailsDate: null,
+  cashHandovers: [],
+  cashHandoverBalance: null,
+  cashHandoverOpening: null
 };
 
 // ---------------- storage helpers ----------------
@@ -405,6 +408,100 @@ function bindPaymentRowActions(container){
     });
   });
 }
+
+
+// ---------------- reception cash handovers ----------------
+function baseReceptionCash(){
+  const b = state.bootstrap || {};
+  const s = b.todaySummary || {};
+  if (s.ClosingCash !== undefined && s.ClosingCash !== null && s.ClosingCash !== '') return Number(s.ClosingCash) || 0;
+  return (Number(b.previousDayCash || 0) + sumField(b.todayDetails || [], 'Cash'));
+}
+function renderCashHandovers(){
+  const openingEl = document.getElementById('cash-handover-start');
+  const balanceEl = document.getElementById('cash-handover-balance');
+  const listEl = document.getElementById('cash-handover-list');
+  if (!openingEl || !balanceEl || !listEl) return;
+  const opening = state.cashHandoverOpening === null ? baseReceptionCash() : Number(state.cashHandoverOpening || 0);
+  const entries = Array.isArray(state.cashHandovers) ? state.cashHandovers : [];
+  const computed = entries.reduce((balance, entry)=> balance + (String(entry.Direction || 'OUT').toUpperCase() === 'IN' ? Number(entry.Amount || 0) : -Number(entry.Amount || 0)), opening);
+  const balance = state.cashHandoverBalance === null ? computed : Number(state.cashHandoverBalance || 0);
+  openingEl.textContent = money(opening);
+  balanceEl.textContent = money(balance);
+  listEl.innerHTML = entries.length ? entries.slice().reverse().map(entry=>{
+    const incoming = String(entry.Direction || 'OUT').toUpperCase() === 'IN';
+    const amount = Number(entry.Amount || 0);
+    return `<div class="row">
+      <div style="min-width:0;flex:1">
+        <div class="row-main">${incoming ? 'Cash received from' : 'Cash handed to'} ${escapeHtml(entry.RecipientName || entry.PersonName || 'Unknown')}</div>
+        <div class="row-sub">${escapeHtml(entry.Date || todayISO())} · ${escapeHtml(entry.Time || entry.Timestamp || '')}${entry.HandedBy ? ' · By ' + escapeHtml(entry.HandedBy) : ''}${entry.Note ? ' · ' + escapeHtml(entry.Note) : ''}</div>
+      </div>
+      <div class="row-amt" style="color:${incoming ? 'var(--ok)' : 'var(--err)'}">${incoming ? '+' : '−'}${money(amount)}</div>
+    </div>`;
+  }).join('') : '<div class="empty">No cash handovers recorded today.</div>';
+}
+async function loadCashHandovers(){
+  const listEl = document.getElementById('cash-handover-list');
+  if (!listEl || !state.auth) return;
+  listEl.innerHTML = '<div class="empty">Loading cash movements…</div>';
+  try{
+    const res = await apiCall('getCashHandovers', { date: todayISO() });
+    const data = res.data || {};
+    state.cashHandovers = Array.isArray(data.entries) ? data.entries : (Array.isArray(data.handovers) ? data.handovers : []);
+    state.cashHandoverOpening = data.openingBalance !== undefined ? Number(data.openingBalance) : baseReceptionCash();
+    state.cashHandoverBalance = data.balance !== undefined ? Number(data.balance) : null;
+    renderCashHandovers();
+  } catch(err){
+    listEl.innerHTML = '<div class="empty">Cash handover history is not connected yet. The backend must support getCashHandovers.</div>';
+    console.warn('Cash handover history unavailable:', err.message);
+  }
+}
+function openCashHandoverModal(){
+  const available = Number(document.getElementById('cash-handover-balance')?.textContent.replace(/[^0-9.-]/g,'') || 0);
+  showModal(`
+    <h3>Record cash movement</h3>
+    <p class="row-sub">Current reception balance: <strong>${money(available)}</strong></p>
+    <label>Movement</label>
+    <select id="ch-direction"><option value="OUT">Cash handed to someone</option><option value="IN">Cash received at reception</option></select>
+    <label>Person who handed over the cash</label>
+    <input type="text" id="ch-handed-by" value="${escapeAttr(state.auth && (state.auth.name || state.auth.username) || '')}" placeholder="Enter name" required>
+    <label>Person who received / gave the cash</label>
+    <input type="text" id="ch-person" placeholder="Admin, trainer, client, etc." required>
+    <label>Amount (₹)</label>
+    <input type="number" id="ch-amount" min="1" step="0.01" placeholder="0.00" required>
+    <label>Remarks (optional)</label>
+    <input type="text" id="ch-note" placeholder="Reason or reference">
+    <button class="btn" id="ch-submit">Save cash movement</button>
+  `);
+  document.getElementById('ch-submit').addEventListener('click', async event=>{
+    const btn = event.currentTarget;
+    if (btn.disabled) return;
+    const direction = document.getElementById('ch-direction').value;
+    const handedBy = document.getElementById('ch-handed-by').value.trim();
+    const personName = document.getElementById('ch-person').value.trim();
+    const amountRaw = document.getElementById('ch-amount').value;
+    const amount = amountRaw === '' ? NaN : Number(amountRaw);
+    const note = document.getElementById('ch-note').value.trim();
+    const currentBalance = Number(document.getElementById('cash-handover-balance')?.textContent.replace(/[^0-9.-]/g,'') || 0);
+    if (!handedBy || !personName){ toast('Enter both names.'); return; }
+    if (!isValidAmount(amount,{allowZero:false})){ toast('Enter an amount greater than zero.'); return; }
+    if (direction === 'OUT' && amount > currentBalance){ toast('The handover exceeds the cash currently available at reception.'); return; }
+    btn.disabled = true; btn.textContent = 'Saving…';
+    try{
+      const res = await apiCall('addCashHandover', {
+        date: todayISO(), direction, handedBy, personName, amount, note,
+        timestamp: new Date().toISOString()
+      });
+      closeModal();
+      toast(res.queued ? 'Cash movement queued for sync.' : 'Cash movement recorded.');
+      await loadCashHandovers();
+    } catch(err){
+      toast('Could not save cash movement: ' + err.message);
+      btn.disabled = false; btn.textContent = 'Save cash movement';
+    }
+  });
+}
+document.getElementById('open-cash-handover')?.addEventListener('click', openCashHandoverModal);
 
 document.getElementById('open-add-payment').addEventListener('click', ()=> openPaymentModal());
 document.getElementById('open-close-day').addEventListener('click', ()=> openCloseDayModal());
