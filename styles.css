@@ -460,3 +460,162 @@ nav.bottomnav button.active .ic { color: var(--app-red); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+
+/* ---------- Light collection UI theme — visual styling only.
+   Intentionally preserves existing application structure, tab layout,
+   component order, field layout, navigation and responsive breakpoints. ---------- */
+:root {
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef1f7;
+  --border: #e2e7ef;
+  --text: #172033;
+  --muted: #687386;
+  --accent: #315be8;
+  --accent-dim: #cbd5fb;
+  --ok: #13865a;
+  --warn: #a66a00;
+  --err: #b84040;
+  --info: #315be8;
+  --radius: 12px;
+  --app-ink: #172033;
+  --app-teal: #eef1f7;
+  --app-teal-bright: #315be8;
+  --app-red: #b84040;
+  --glass-line: #e2e7ef;
+  --glass-fill: #ffffff;
+}
+body {
+  color: #172033;
+  background: #f5f7fb;
+  font-size: 15px;
+  line-height: 1.5;
+  background-attachment: initial;
+}
+h1 { font-size: 28px; }
+h2 { font-size: 18px; }
+label { color: #687386; font-size: 13px; }
+header.topbar {
+  color: #172033;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e7ef;
+  box-shadow: 0 2px 8px rgba(23,32,51,.03);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.topbar-role { color: #687386; }
+.sync-pill {
+  color: #687386;
+  background: #f5f7fb;
+  border-color: #e2e7ef;
+}
+.card {
+  color: #172033;
+  background: #ffffff;
+  border: 1px solid #e2e7ef;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(23,32,51,.03);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.card::before { display: none; }
+.card h2 {
+  color: #172033;
+  font-size: 18px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 700;
+}
+.stat {
+  color: #172033;
+  background: #ffffff;
+  border: 1px solid #e2e7ef;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(23,32,51,.03);
+}
+.stat .num {
+  color: #172033;
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.stat .label { color: #687386; font-size: 13px; }
+.row { border-bottom-color: #e2e7ef; }
+.row-main, .row-amt { color: #172033; font-variant-numeric: tabular-nums; }
+.row-sub, .empty { color: #687386; }
+input[type=text], input[type=password], input[type=number], input[type=date],
+input[type=tel], select, textarea {
+  color: #172033;
+  background: #ffffff;
+  border: 1px solid #cfd6e2;
+  border-radius: 8px;
+  padding: 10px 11px;
+  box-shadow: none;
+}
+input::placeholder, textarea::placeholder { color: #8791a2; }
+input:focus, select:focus, textarea:focus {
+  background: #ffffff;
+  border-color: #315be8;
+  box-shadow: 0 0 0 2px rgba(49,91,232,.16);
+}
+.btn {
+  color: #ffffff;
+  background: #315be8;
+  border: 1px solid #315be8;
+  border-radius: 8px;
+  box-shadow: none;
+  transition: filter .15s ease, background-color .15s ease;
+}
+.btn:hover { filter: brightness(.94); box-shadow: none; }
+.btn.secondary, .btn.ghost {
+  color: #172033;
+  background: #eef1f7;
+  border: 1px solid #eef1f7;
+  box-shadow: none;
+}
+.btn.danger {
+  color: #b84040;
+  background: #fff0f0;
+  border: 1px solid #f4dada;
+  box-shadow: none;
+}
+.badge.ok { color: #13865a; background: #e7f5ee; }
+.badge.warn { color: #a66a00; background: #fff4dc; }
+.badge.err { color: #b84040; background: #fff0f0; }
+.badge.info { color: #315be8; background: #edf1ff; }
+nav.bottomnav {
+  color: #172033;
+  background: rgba(255,255,255,.97);
+  border-top: 1px solid #e2e7ef;
+  box-shadow: 0 -2px 8px rgba(23,32,51,.03);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+nav.bottomnav button { color: #687386; }
+nav.bottomnav button.active {
+  color: #315be8;
+  background: #edf1ff;
+  border-color: #dbe3ff;
+}
+nav.bottomnav button.active .ic { color: #315be8; }
+.modal-backdrop {
+  background: rgba(23,32,51,.38);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+.modal {
+  color: #172033;
+  background: #ffffff;
+  border: 1px solid #e2e7ef;
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(23,32,51,.12);
+}
+.toast {
+  color: #172033;
+  background: #ffffff;
+  border: 1px solid #e2e7ef;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(23,32,51,.10);
+}
+.error-msg { color: #b84040; }
