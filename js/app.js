@@ -1,11 +1,10 @@
 /* =========================================================================
    AK PACK FITNESS — FRONTEND v2
-   Modular, framework-free, mobile-first. Talks to a Google Apps Script
-   web app (Code.gs) which uses a Google Sheet as the database.
-   Set SCRIPT_URL below after deploying the Apps Script as a Web App.
+   Modular, framework-free, mobile-first.
+   Backend integration is intentionally disconnected.
    ========================================================================= */
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB5uQTsgBK_dePnrCJDRMXOWbBkOde4jOvERc2vjxnkRx_5VtcpQw-QLwlyergvqEQTg/exec";
+const SCRIPT_URL = '';
 
 const LS_KEYS = { AUTH: 'akpf_auth', QUEUE: 'akpf_queue', CACHE: 'akpf_cache' };
 const BUSINESS_TIME_ZONE = 'Asia/Kolkata';
@@ -80,6 +79,7 @@ function loadCache(){ try { return JSON.parse(safeStorageGet(scopedStorageKey(LS
 
 // ---------------- API ----------------
 async function apiCall(action, params, {queueOnFail=false} = {}){
+  if (!SCRIPT_URL) throw new Error('Backend disconnected. Reconnect a backend to use live data or save changes.');
   // params is merged first, then action/username/token are applied last so a
   // form field (e.g. a new trainer's own "username") can never overwrite
   // the logged-in user's own credentials.
@@ -120,7 +120,7 @@ async function apiCall(action, params, {queueOnFail=false} = {}){
 }
 
 async function flushQueue(){
-  if (state.syncing) return;
+  if (!SCRIPT_URL || state.syncing) return;
   const queue = getQueue();
   if (!queue.length || !navigator.onLine) { updateSyncPill(); return; }
   state.syncing = true; updateSyncPill();
@@ -251,6 +251,7 @@ document.getElementById('login-form').addEventListener('submit', async (e)=>{
   errEl.textContent = '';
   btn.disabled = true; btn.textContent = 'Signing in…';
   try{
+    if (!SCRIPT_URL) throw new Error('Backend disconnected. Sign-in is unavailable until a backend is configured.');
     const res = await fetch(SCRIPT_URL, {
       method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
       body: JSON.stringify({ action:'login', username, pin })
@@ -285,7 +286,7 @@ async function enterApp(){
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('app-screen').classList.remove('hidden');
   document.getElementById('topbar-role').textContent = (state.auth.name || state.auth.username) + ' · ' + state.auth.role;
-  document.getElementById('admin-script-url').textContent = SCRIPT_URL;
+  document.getElementById('admin-script-url').textContent = 'Backend disconnected';
   document.getElementById('nav-admin').classList.toggle('hidden', state.auth.role !== 'Admin');
 
   // Cache keys are account-scoped; never render a previous user's cached data.
