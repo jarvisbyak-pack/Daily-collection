@@ -1049,11 +1049,24 @@ function escapeAttr(s){ return escapeHtml(s); }
 
 // ================= boot =================
 (function init(){
-  const auth = loadAuth();
-  if (auth && auth.token){
-    state.auth = auth; storageAccount = auth.username || null;
-    enterApp().catch(err=>toast('Could not open the app: ' + err.message));
-  }
+  // Login is intentionally bypassed while the Apps Script backend is disconnected.
+  // This opens a read-only landing screen; it does not expose cached account data.
+  clearAuth();
+  state.bootstrap = null;
+  state.advances = null;
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app-screen').classList.remove('hidden');
+  document.getElementById('topbar-title').textContent = 'AK Pack Fitness';
+  document.getElementById('topbar-role').textContent = 'Backend disconnected · Preview only';
+  document.getElementById('logout-btn').classList.add('hidden');
+  document.querySelector('nav.bottomnav').classList.add('hidden');
+  document.querySelector('main').innerHTML = `
+    <section class="card" style="margin-top:24px;">
+      <h2>App access restored</h2>
+      <p>The username and PIN screen has been removed from this frontend.</p>
+      <p class="row-sub" style="margin-top:10px;">The Apps Script backend is disconnected. Live collection records, member data, synchronization, and saving are unavailable. Existing Google Sheets data has not been deleted.</p>
+      <p class="row-sub" style="margin-top:10px;">Connect a replacement backend to restore full functionality.</p>
+      <span class="badge warn">Read-only preview · No live data</span>
+    </section>`;
   updateSyncPill();
-  setInterval(()=>{ if(navigator.onLine) flushQueue(); }, 20000);
 })();
