@@ -1,0 +1,4 @@
+/* Fresh app bootstrap: no login view is loaded. */
+const tabFiles=['./views/app-shell.html','./views/tab-collection.html','./views/tab-details.html','./views/tab-advances.html','./views/tab-pt.html','./views/tab-members.html','./views/tab-admin.html'];
+async function loadText(path){const r=await fetch(path,{cache:'no-cache'});if(!r.ok)throw new Error('Could not load '+path+' ('+r.status+')');return r.text()}
+async function bootstrap(){const root=document.getElementById('ui-root');try{const files=await Promise.all(tabFiles.map(loadText));const [shell,...tabs]=files;root.innerHTML=shell;document.getElementById('tab-views').innerHTML=tabs.join('\n');await import('./fresh-app.js')}catch(error){root.innerHTML='<main class="load-error"><h1>AK PACK Fitness</h1><p>The application could not be loaded.</p><p>'+String(error.message||error)+'</p></main>';console.error('AK PACK bootstrap failed',error)}}bootstrap();
